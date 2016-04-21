@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include <iostream>
 #include "MenuController.h";
+#include "JohnMRobertM_AccountOperations.h";
 
 
 void showWelcomeMessage() {
@@ -16,6 +17,14 @@ int main()
 	std::string runAgain = "Y";
 	MenuController *menuController;
 	showWelcomeMessage();
+	
+	/*methods set/getFnameLname works as expected*/
+	//Stub code to test AccountOperations.getFnameLName()
+	//comment out or delete when completed
+	//JohnMRobertM_AccountOperations accountOps;
+	//accountOps.setFnameLname();
+	//std::cout << "Get validated fNameLName: " << accountOps.getFnameLname() << std::endl;
+
 	//start main controller, shows menu
 	menuController = new MenuController();
 	system("pause");
