@@ -122,6 +122,48 @@ public:
 
 	void setAddress()
 	{
+		std::string address;
+		std::string accept;
+		bool flag = false;//flag for empty string / incorrect string true string is empty/incorrect false otherwise
+		//clear the screen for clarity
+		system("cls");
+		 
+		do
+		{
+
+			do
+			{
+				std::cout << "Please enter the customer's street address" << std::endl << std::endl;
+				std::getline(std::cin, address);
+				
+				if (address.empty())
+				{
+					flag = true;
+					system("cls");//clear the screen for clarity
+					std::cout << "\aEmpty Error: The address cannot be empty." << std::endl << std::endl;
+				}
+				else
+					flag = false;
+
+			} while (flag);
+
+			do
+			{
+				std::cout << std::endl << "Please verify the above is correct" << std::endl;
+				std::cout << "Enter y for yes or n for no: ";
+				std::cin >> accept;
+			} while (accept.compare("y") != 0 && accept.compare("Y") != 0 && accept.compare("n") != 0 && accept.compare("N") != 0);
+
+			if (accept.compare("n") == 0 || accept.compare("N") == 0)
+			{
+				flag = true;
+				std::cin.get();
+				system("cls");//clear the screen for clarity
+			}	
+		} while (flag);
+
+		//add to struct
+		record.address = address;
 	
 	}
 
@@ -146,9 +188,9 @@ public:
 		return record.fNameLname;
 	}
 
-	void getAddress()
+	std::string getAddress()
 	{
-
+		return record.address;
 	}
 
 	void getPhoneNumber()

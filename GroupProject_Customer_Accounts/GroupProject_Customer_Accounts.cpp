@@ -19,11 +19,19 @@ int main()
 	showWelcomeMessage();
 	
 	/*methods set/getFnameLname works as expected*/
-	//Stub code to test AccountOperations.getFnameLName()
+	//Stub code to test AccountOperations.set/getFnameLName()
 	//comment out or delete when completed
 	//JohnMRobertM_AccountOperations accountOps;
 	//accountOps.setFnameLname();
 	//std::cout << "Get validated fNameLName: " << accountOps.getFnameLname() << std::endl;
+
+	/*methods set/getAddress works as expected*/
+	//Stub code to test AccountOperationss.set/getAddress()
+	//comment out or delete when completed
+	//JohnMRobertM_AccountOperations accountOps;
+	//accountOps.setAddress();
+	//system("cls");
+	//std::cout << accountOps.getAddress() << std::endl;
 
 	//start main controller, shows menu
 	menuController = new MenuController();
