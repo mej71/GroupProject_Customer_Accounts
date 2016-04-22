@@ -23,6 +23,7 @@ int main()
 	//comment out or delete when completed
 	//JohnMRobertM_AccountOperations accountOps;
 	//accountOps.setFnameLname();
+	//system("cls");
 	//std::cout << "Get validated fNameLName: " << accountOps.getFnameLname() << std::endl;
 
 	/*methods set/getAddress works as expected*/
@@ -48,6 +49,22 @@ int main()
 	//accountOps.setPhoneNumber();
 	//system("cls");
 	//std::cout << accountOps.getPhoneNumber() << std::endl;
+
+	/*methods set/getAccountBalance works as expected*/
+	//Stub code to test AccountOperationss.set/getAccountBalance()
+	//comment out or delete when completed
+	//JohnMRobertM_AccountOperations accountOps;
+	//accountOps.setAccountBalance();
+	//system("cls");
+	//std::cout << accountOps.getAccountBalance() << std::endl;
+
+	/*methods set/getLastPaymentDate() works as expected*/
+	//Stub code to test AccountOperationss.set/getLastPaymentDate()()
+	//comment out or delete when completed
+	//JohnMRobertM_AccountOperations accountOps;
+	//accountOps.setLastPaymentDate();
+	//system("cls");
+	//std::cout << accountOps.getLastPaymentDate() << std::endl;
 
 	//start main controller, shows menu
 	menuController = new MenuController();

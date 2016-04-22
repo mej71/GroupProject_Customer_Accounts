@@ -47,6 +47,8 @@ public:
 		int flag;// serves as error accumaltor. 0 meaning zero errors
 		int index;//element position
 		bool allAlpha;//flag: allAlpha is true if isalpha == true, false otherwise
+		std::string accept;
+
 
 		//clear the screen for clarity
 		system("cls");
@@ -55,6 +57,7 @@ public:
 		{
 			
 			flag = 0;// serves as error accumaltor for outer do while loop. 0 meaning zero errors
+			accept = "";
 
 			std::cout << "Please enter the customer's first name only followed by the return key.\n";
 			std::cout << ": ";
@@ -105,6 +108,24 @@ public:
 				std::cout << "\aLength Error: First and last name should be at least two characters each.\n\n";
 				flag++;
 			}
+
+			//verify
+			if (flag == 0)
+			{
+				do
+				{
+					std::cout << std::endl << "Please verify the above is correct" << std::endl;
+					std::cout << "Enter y for yes or n for no: ";
+					std::cin >> accept;
+				} while (accept.compare("y") != 0 && accept.compare("Y") != 0 && accept.compare("n") != 0 && accept.compare("N") != 0);
+			}
+
+			if (accept.compare("n") == 0 || accept.compare("N") == 0)
+			{
+				flag++;
+				std::cin.get();//get newline char
+				system("cls");//clear the screen for clarity
+			}
 			
 
 		} while (flag != 0);
@@ -114,6 +135,9 @@ public:
 		record.fNameLname = fName;
 		record.fNameLname += " ";
 		record.fNameLname += lName;
+
+		//Clear the input stream
+		std::cin.ignore();
 	
 	}
 
@@ -121,12 +145,16 @@ public:
 	{
 		std::string address;
 		std::string accept;
-		bool flag = false;//flag for empty string / incorrect string true string is empty/incorrect false otherwise
+		bool flag;//flag for empty string / incorrect string true string is empty/incorrect false otherwise
 		//clear the screen for clarity
 		system("cls");
 		 
 		do
 		{
+			//set flag
+			flag = false;
+			//set accept
+			accept = "";
 
 			do
 			{
@@ -143,7 +171,7 @@ public:
 					flag = false;
 
 			} while (flag);
-
+			//verify
 			do
 			{
 				std::cout << std::endl << "Please verify the above is correct" << std::endl;
@@ -161,6 +189,9 @@ public:
 
 		//add to struct
 		record.address = address;
+
+		//Clear the input stream
+		std::cin.ignore();
 	
 	}
 
@@ -168,12 +199,15 @@ public:
 	{
 		std::string address2;
 		std::string accept;
-		bool flag = false;//flag for empty string / incorrect string true string is empty/incorrect false otherwise
+		bool flag;//flag for empty string / incorrect string true string is empty/incorrect false otherwise
 		system("cls");//clear the screen for clarity
 
 		do
 		{
-
+			//set accept
+			accept = "";
+			//set flag
+			flag = false;
 			do
 			{
 				std::cout << "Please enter the customer's City State and Zip separated by spaces only" << std::endl << std::endl;
@@ -183,13 +217,13 @@ public:
 				{
 					flag = true;
 					system("cls");//clear the screen for clarity
-					std::cout << "\aEmpty Error: The address cannot be empty." << std::endl << std::endl;
+					std::cout << "\aEmpty Error: The  *** address cannot be empty." << std::endl << std::endl;
 				}
 				else
 					flag = false;
 
 			} while (flag);
-
+			//verify
 			do
 			{
 				std::cout << std::endl << "Please verify the above is correct" << std::endl;
@@ -207,6 +241,9 @@ public:
 
 		//add to struct
 		record.cityStateZip = address2;
+
+		//Clear the input stream
+		std::cin.ignore();
 	}
 
 	void setPhoneNumber()
@@ -220,6 +257,8 @@ public:
 		{
 			//set bool to false
 			invalid = false;
+			//set accept
+			accept = "";
 
 			std::cout << "Please enter the customer's contact number. Enter 10 digits only." << std::endl << std::endl;
 			std::cin >> number;
@@ -240,7 +279,7 @@ public:
 				system("cls");//clear the screen for clarity
 				std::cout << "\aPhone Number Error: Enter 10 digits only no spaces." << std::endl << std::endl;
 			}
-
+			//verify
 			if (!invalid)
 			{
 				do
@@ -267,16 +306,180 @@ public:
 		record.phoneNumber.insert(0, "(");
 		record.phoneNumber.insert(4, ")");
 		record.phoneNumber.insert(8, "-");
+
+		//Clear the input stream
+		std::cin.ignore();
 	
 	}
 
 	void setAccountBalance()
 	{
-	
+		char number[100];
+		bool invalid;//flag for number. If number is invalid; invalid == true otherwise false
+		int decimal;
+		std::string accept;
+
+		system("cls");//clear the screen for clarity
+		do
+		{
+			//set bool to false
+			invalid = false;
+			//set decimal
+			decimal = 0;
+			//set accept
+			accept = "";
+
+			std::cout << "Please enter the customer's total balance. Example: 567.00" << std::endl << std::endl;
+			std::cin >> number;
+			
+			//check for all digit chars
+			for (int index = 0; index < strlen(number); index++)
+			{
+				if (!isdigit(number[index]))
+				{
+					if (number[index] == '.')//if is digit false check if decimal '.'
+					{
+						decimal++;// increment decimal to one to indicate 1 decimal 
+					}
+					else if (!isdigit(number[index]) && number[index] != '.')
+					{
+						invalid = true;
+					}
+				}
+			}
+
+			//check that there are only two chars after decimal which were already checked to be digits
+			//by checking the decimals position. Number must contain a min of 4 char digits ex 1.00
+			std::string temp = number;
+			if (temp.length() < 4)
+			{
+				invalid = true;
+			}
+			else if (temp.at((temp.length() - 3)) != '.')
+				invalid = true;
+
+			//throw error
+			if (invalid || decimal != 1)//check if in valid true or too many decimals
+			{
+				system("cls");//clear the screen for clarity
+				std::cout << "\aBalance Error: Balance must be a positive value with only 1 decimal place." << std::endl << std::endl;
+			}
+			//verify
+			if (!invalid && decimal == 1)
+			{
+				do
+				{
+					std::cout << std::endl << "Please verify the above is correct" << std::endl;
+					std::cout << "Enter y for yes or n for no: ";
+					std::cin >> accept;
+				} while (accept.compare("y") != 0 && accept.compare("Y") != 0 && accept.compare("n") != 0 && accept.compare("N") != 0);
+			}
+
+			if (accept.compare("n") == 0 || accept.compare("N") == 0)
+			{
+				invalid = true;
+				decimal = 0;
+				std::cin.get();//get newline char
+				system("cls");//clear the screen for clarity
+			}
+
+
+		} while (invalid || decimal != 1);
+
+		//add to struct
+		record.accountBalance = number;
+
+		//Clear the input stream
+		std::cin.ignore();
 	}
 
 	void setLastPaymentDate()
 	{
+		char date[11];
+		bool invalid;//flag for number. If number is invalid; invalid == true otherwise false 
+		std::string accept;
+		std::string temp;
+
+		system("cls");//clear the screen for clarity
+		do
+		{
+			//set bool to false
+			invalid = false;
+			//set accept
+			accept = "";
+			//set temp
+			temp = "";
+
+			std::cout << "Please enter the customer's last payment date. Example: 01/02/2016" << std::endl << std::endl;
+			std::cin >> date;
+			
+			//check date format
+			for (int index = 0; index < 10; index++)
+			{
+				if (index != 2 && index != 5)
+				{
+					if (!isdigit(date[index]))
+						invalid = true;
+				}
+				else
+				{
+					if (date[index] != '/')
+						invalid = true;
+				}
+			}
+			
+			temp = date;
+			//check date values only if invalid is false
+			if (!invalid)//because stoi will cause a run time error if non digit is encountered.
+			{
+				std::string mm = temp.substr(0, 2);
+				std::string dd = temp.substr(3, 2);
+				std::string yyyy = temp.substr(6, 4);
+
+				if (stoi(mm) <= 0 || stoi(mm) > 12)
+					invalid = true;
+				if (stoi(dd) <= 0 || stoi(dd) > 31)
+					invalid = true;
+				if (stoi(yyyy) < 1999)
+					invalid = true;
+			}
+
+
+			//throw error
+			if (invalid)//check if in valid true or too many decimals
+			{
+				system("cls");//clear the screen for clarity
+				std::cout << "\aDate Error: Date format must match: MM/DD/YYYY" << std::endl
+					<< "Year cannot be prior to 1999" << std::endl  << std::endl;
+			}
+			//verify
+			if (!invalid)
+			{
+				do
+				{
+					std::cout << std::endl << "Please verify the above is correct" << std::endl;
+					std::cout << "Enter y for yes or n for no: ";
+					std::cin >> accept;
+				} while (accept.compare("y") != 0 && accept.compare("Y") != 0 && accept.compare("n") != 0 && accept.compare("N") != 0);
+			}
+
+			if (accept.compare("n") == 0 || accept.compare("N") == 0)
+			{
+				invalid = true;
+				std::cin.get();//get newline char
+				system("cls");//clear the screen for clarity
+			}
+
+
+
+
+		} while (invalid);
+
+		//add to struct
+		record.lastPaymentDate = date;
+
+		//Clear the input stream
+		std::cin.ignore();
 	
 	}
 
@@ -301,14 +504,14 @@ public:
 		return record.phoneNumber;
 	}
 
-	void getAccountBalance()
+	std::string getAccountBalance()
 	{
-
+		return record.accountBalance;
 	}
 
-	void getLastPaymentDate()
+	std::string getLastPaymentDate()
 	{
-
+		return record.lastPaymentDate;
 	}
 
 };
