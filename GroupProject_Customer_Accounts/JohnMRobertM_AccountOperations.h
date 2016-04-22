@@ -5,6 +5,7 @@
 
 #include <string>
 #include <iostream>
+#include <fstream>
 
 /*
 Class Author: Robert M. written for a collaborative Project between John Milman and Robert Munshower
@@ -34,8 +35,31 @@ private:
 	};
 
 	CustomerRecord record;//reference to the struct
+	std::ofstream accountFile;
 
 public:
+
+	//Constructor
+	JohnMRobertM_AccountOperations() {
+		//creates file if it does not exist, opens it in append mode.
+		accountFile.open("accounts.txt", std::fstream::out | std::fstream::app);
+	}
+
+	//calls all the input field methods, and the writes to the file
+	void createRecord() {
+		setFnameLname();
+		setAddress();
+		setAddressLine2();
+		setPhoneNumber();
+		setAccountBalance();
+		setLastPaymentDate();
+		addRecord();
+	}
+
+	//Add record to file
+	void addRecord() {
+		accountFile << record.fNameLname << "," << record.address << + "," << record.cityStateZip << "," << record.phoneNumber << "," << record.accountBalance << "," << record.lastPaymentDate << std::endl;
+	}
 
 	//Mutators associated with customerRecord struct
 	//all mutators provide i/O and validation
@@ -169,6 +193,12 @@ public:
 				}
 				else
 					flag = false;
+					//check for any punctuation
+					for (int i = 0; i < address.length(); i++) {
+						if (ispunct(address[i])) {
+							flag = true;
+						}
+					}
 
 			} while (flag);
 			//verify
@@ -221,6 +251,12 @@ public:
 				}
 				else
 					flag = false;
+					//check for any punctuation
+					for (int i = 0; i < address2.length(); i++) {
+						if (ispunct(address2[i])) {
+							flag = true;
+						}
+					}
 
 			} while (flag);
 			//verify
@@ -436,12 +472,20 @@ public:
 				std::string dd = temp.substr(3, 2);
 				std::string yyyy = temp.substr(6, 4);
 
-				if (stoi(mm) <= 0 || stoi(mm) > 12)
+				try
+				{
+					if (stoi(mm) <= 0 || stoi(mm) > 12)
+						invalid = true;
+					if (stoi(dd) <= 0 || stoi(dd) > 31)
+						invalid = true;
+					if (stoi(yyyy) < 1999)
+						invalid = true;
+				}
+				catch (const std::exception&)
+				{
 					invalid = true;
-				if (stoi(dd) <= 0 || stoi(dd) > 31)
-					invalid = true;
-				if (stoi(yyyy) < 1999)
-					invalid = true;
+				}
+				
 			}
 
 
