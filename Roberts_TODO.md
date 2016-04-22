@@ -29,3 +29,5 @@ write  changeRecord()
 to edit a current record
 
 Tasks 5&6 will be dependent on getRecord() as this will be called first 
+
+7) Split the input for First and Last name.  If you input these incorrectly, the errors put out make it incoherent.  Get and check for one thing at a time.
