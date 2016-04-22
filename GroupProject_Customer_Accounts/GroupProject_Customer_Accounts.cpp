@@ -33,6 +33,14 @@ int main()
 	//system("cls");
 	//std::cout << accountOps.getAddress() << std::endl;
 
+	/*methods set/getAddress2 works as expected*/
+	//Stub code to test AccountOperationss.set/getAddress2()
+	//comment out or delete when completed
+	//JohnMRobertM_AccountOperations accountOps;
+	//accountOps.setAddressLine2();
+	//system("cls");
+	//std::cout << accountOps.getAddressLine2() << std::endl;
+
 	/*methods set/getPhoneNumber works as expected*/
 	//Stub code to test AccountOperationss.set/getPhoneNumber()
 	//comment out or delete when completed
