@@ -33,6 +33,14 @@ int main()
 	//system("cls");
 	//std::cout << accountOps.getAddress() << std::endl;
 
+	/*methods set/getPhoneNumber works as expected*/
+	//Stub code to test AccountOperationss.set/getPhoneNumber()
+	//comment out or delete when completed
+	//JohnMRobertM_AccountOperations accountOps;
+	//accountOps.setPhoneNumber();
+	//system("cls");
+	//std::cout << accountOps.getPhoneNumber() << std::endl;
+
 	//start main controller, shows menu
 	menuController = new MenuController();
 	system("pause");

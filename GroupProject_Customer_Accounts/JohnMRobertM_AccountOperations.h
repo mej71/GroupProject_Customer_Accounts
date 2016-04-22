@@ -109,9 +109,6 @@ public:
 
 		} while (flag != 0);
 		
-		//For testing comment out or delete when complete
-		//if (flag == 0)
-			//std::cout << "fName: " << fName << " lName: " << lName << " are valid!\n";
 
 		//add to struct piece by piece
 		record.fNameLname = fName;
@@ -157,7 +154,7 @@ public:
 			if (accept.compare("n") == 0 || accept.compare("N") == 0)
 			{
 				flag = true;
-				std::cin.get();
+				std::cin.get();//get newline char
 				system("cls");//clear the screen for clarity
 			}	
 		} while (flag);
@@ -169,6 +166,62 @@ public:
 
 	void setPhoneNumber()
 	{
+		char number[11];
+		bool invalid;//flag for number. If number is invalid; invalid == true otherwise false 
+		std::string accept;
+
+		system("cls");//clear the screen for clarity
+		do 
+		{
+			//set bool to false
+			invalid = false;
+
+			std::cout << "Please enter the customer's contact number. Enter 10 digits only." << std::endl << std::endl;
+			std::cin >> number;
+
+			//check for alpha chars
+			for (int index = 0; index < strlen(number); index++)
+			{
+				if (isalpha(number[index]) && invalid != true)
+					invalid = true;
+			}
+			//check length
+			if (strlen(number) != 10)
+				invalid = true;
+
+			//throw error
+			if (invalid)
+			{
+				system("cls");//clear the screen for clarity
+				std::cout << "\aPhone Number Error: Enter 10 digits only no spaces." << std::endl << std::endl;
+			}
+
+			if (!invalid)
+			{
+				do
+				{
+					std::cout << std::endl << "Please verify the above is correct" << std::endl;
+					std::cout << "Enter y for yes or n for no: ";
+					std::cin >> accept;
+				} while (accept.compare("y") != 0 && accept.compare("Y") != 0 && accept.compare("n") != 0 && accept.compare("N") != 0);
+			}
+
+			if (accept.compare("n") == 0 || accept.compare("N") == 0)
+			{
+				invalid = true;
+				std::cin.get();//get newline char
+				system("cls");//clear the screen for clarity
+			}
+
+
+		} while (invalid);
+
+		//add to struct
+		record.phoneNumber = number;
+		//format the number in the struct
+		record.phoneNumber.insert(0, "(");
+		record.phoneNumber.insert(4, ")");
+		record.phoneNumber.insert(8, "-");
 	
 	}
 
@@ -193,9 +246,9 @@ public:
 		return record.address;
 	}
 
-	void getPhoneNumber()
+	std::string getPhoneNumber()
 	{
-
+		return record.phoneNumber;
 	}
 
 	void getAccountBalance()
