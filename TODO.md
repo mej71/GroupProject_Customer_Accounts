@@ -20,7 +20,7 @@ this will display the entire record file <strong>done -Robert</strong>
 displays a single record <strong>done - Jem</strong>
 
 5)write deleteRecord()
-to delete a customer record
+to delete a customer record <strong>done - Jem</strong>
 
 6)write  changeRecord()
 to edit a current record
