@@ -24,28 +24,37 @@ class JohnMRobertM_AccountOperations {
 
 private:
 	//The structure to hold all componets of a customer record
+	static const int SIZE = 60;
 	struct CustomerRecord
 	{
-		std::string fNameLname;
-		std::string address;
-		std::string cityStateZip;
-		std::string phoneNumber;
-		std::string accountBalance;
-		std::string lastPaymentDate;
+		char fNameLname[SIZE];
+		char address[SIZE];
+		char cityStateZip[SIZE];
+		char phoneNumber[SIZE];
+		char accountBalance[SIZE];
+		char lastPaymentDate[SIZE];
 	};
 
 	CustomerRecord record;//reference to the struct
-	std::ofstream accountFile;
+	std::fstream accountFile;
 
 public:
 
 	//Constructor
 	JohnMRobertM_AccountOperations() {
 		//creates file if it does not exist, opens it in append mode.
-		accountFile.open("accounts.txt", std::fstream::out | std::fstream::app);
+		accountFile.open("accounts.dat", std::ios::out | std::ios::app);
+		accountFile.close();
+		
+
+
 	}
 
-	//calls all the input field methods, and the writes to the file
+	/*
+    createRecord() calls the AccountOperations set methods
+    then opens the account file accounts.dat in append mode
+    stores the entire structure to the file and closes the file.
+    */
 	void createRecord() {
 		setFnameLname();
 		setAddress();
@@ -53,13 +62,47 @@ public:
 		setPhoneNumber();
 		setAccountBalance();
 		setLastPaymentDate();
-		addRecord();
+		accountFile.open("accounts.dat", std::ios::out | std::ios::app);
+		accountFile.write(reinterpret_cast<char *>(&record), sizeof(record));
+		accountFile.close();
 	}
 
-	//Add record to file
-	void addRecord() {
-		accountFile << record.fNameLname << "," << record.address << + "," << record.cityStateZip << "," << record.phoneNumber << "," << record.accountBalance << "," << record.lastPaymentDate << std::endl;
-	}
+	/*
+    getAllRecords() opens the accounts.dat file and 
+    prints all files to console.
+    */
+	void getAllRecords()
+	{  
+        int records = 0;
+        //clear the screen for clarity
+        system("cls");
+		accountFile.open("accounts.dat", std::ios::in | std::ios::binary);
+		accountFile.read(reinterpret_cast<char *>(&record), sizeof(record));
+        std::cout << "Displaying All Records" << std::endl;
+        std::cout << " ==========================================================" << std::endl;
+		while (!accountFile.eof())
+        {
+            std::cout << " ==========================================================" <<std::endl;
+			std::cout << "          Name: " << record.fNameLname << std::endl;
+			std::cout << "       Address: " << record.address << std::endl;
+			std::cout << "                " << record.cityStateZip << std::endl;
+			std::cout << "  Phone Number: " << record.phoneNumber << std::endl;
+			std::cout << "       Balance: " << record.accountBalance << std::endl;
+			std::cout << "  Last Payment: " << record.lastPaymentDate << std::endl;
+            std::cout << " ==========================================================" <<std::endl;
+			accountFile.read(reinterpret_cast<char *>(&record), sizeof(record));
+            records++;
+         }
+         std::cout << " ==========================================================" << std::endl;
+         std::cout << "Total Number of Records: " << records << std::endl << std::endl;
+         std::cout << "Press return key to got back to the main menu.";
+         std::cin.get();
+         system("cls");
+         
+     }
+
+
+
 
 	//Mutators associated with customerRecord struct
 	//all mutators provide i/O and validation
@@ -156,9 +199,9 @@ public:
 		
 
 		//add to struct piece by piece
-		record.fNameLname = fName;
-		record.fNameLname += " ";
-		record.fNameLname += lName;
+		strcpy_s(record.fNameLname, fName);// record.fNameLname = fName;
+		strcat_s(record.fNameLname, " ");//record.fNameLname += " ";
+		strcat_s(record.fNameLname, lName);//record.fNameLname += lName;
 
 		//Clear the input stream
 		std::cin.ignore();
@@ -218,7 +261,7 @@ public:
 		} while (flag);
 
 		//add to struct
-		record.address = address;
+		strcpy_s(record.address, address.c_str());//record.address = address;
 
 		//Clear the input stream
 		std::cin.ignore();
@@ -276,7 +319,7 @@ public:
 		} while (flag);
 
 		//add to struct
-		record.cityStateZip = address2;
+		strcpy_s(record.cityStateZip,address2.c_str());//record.cityStateZip = address2;
 
 		//Clear the input stream
 		std::cin.ignore();
@@ -336,12 +379,14 @@ public:
 
 		} while (invalid);
 
-		//add to struct
-		record.phoneNumber = number;
-		//format the number in the struct
-		record.phoneNumber.insert(0, "(");
-		record.phoneNumber.insert(4, ")");
-		record.phoneNumber.insert(8, "-");
+		//format the number
+        std::string number2 = number;
+        number2.insert(0, "(");
+		number2.insert(4, ")");
+		number2.insert(8, "-");
+
+        //add to struct
+        strcpy_s(record.phoneNumber, number2.c_str());//record.phoneNumber = number;
 
 		//Clear the input stream
 		std::cin.ignore();
@@ -423,7 +468,7 @@ public:
 		} while (invalid || decimal != 1);
 
 		//add to struct
-		record.accountBalance = number;
+		strcpy_s(record.accountBalance, number);//record.accountBalance = number;
 
 		//Clear the input stream
 		std::cin.ignore();
@@ -520,7 +565,7 @@ public:
 		} while (invalid);
 
 		//add to struct
-		record.lastPaymentDate = date;
+		strcpy_s(record.lastPaymentDate, date);//record.lastPaymentDate = date;
 
 		//Clear the input stream
 		std::cin.ignore();

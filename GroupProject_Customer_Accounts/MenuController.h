@@ -55,6 +55,7 @@ class MenuController {
 				case 2:
 					break;
 				case 3:
+                    operations.getAllRecords();
 					break;
 				case 4:
 					exitProgram = true;
