@@ -53,6 +53,7 @@ class MenuController {
 					operations.createRecord();
 					break;
 				case 2:
+					operations.findRecord();
 					break;
 				case 3:
                     operations.getAllRecords();

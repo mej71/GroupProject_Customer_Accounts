@@ -42,7 +42,7 @@ public:
 
 	//Constructor
 	JohnMRobertM_AccountOperations() {
-		//creates file if it does not exist, opens it in append mode.
+		//creates file if it does not exist
 		accountFile.open("accounts.dat", std::ios::out | std::ios::app);
 		accountFile.close();
 		
@@ -77,6 +77,7 @@ public:
         //clear the screen for clarity
         system("cls");
 		accountFile.open("accounts.dat", std::ios::in | std::ios::binary);
+
 		accountFile.read(reinterpret_cast<char *>(&record), sizeof(record));
         std::cout << "Displaying All Records" << std::endl;
         std::cout << " ==========================================================" << std::endl;
@@ -93,6 +94,10 @@ public:
 			accountFile.read(reinterpret_cast<char *>(&record), sizeof(record));
             records++;
          }
+		 //special message if no records exist
+		 if (records == 0) {
+			std::cout << "             No records found" << std::endl;
+		 }
          std::cout << " ==========================================================" << std::endl;
          std::cout << "Total Number of Records: " << records << std::endl << std::endl;
          std::cout << "Press return key to got back to the main menu.";
@@ -100,6 +105,47 @@ public:
          system("cls");
          
      }
+
+	//finds all records with a matching first and last name.
+	void findRecord() {
+		//clear the screen for clarity
+		system("cls");
+
+		//get input to find desired name
+		char searchName[SIZE];
+		std::cout << "Please enter the desired customer's first and last name, separated by a space, and followed by the return key.\n";
+		std::cout << ": ";
+		std::cin.getline(searchName, 256);
+
+		//search through file for matching records
+		bool recordFound = false;
+		accountFile.open("accounts.dat", std::ios::in | std::ios::binary);
+
+		accountFile.read(reinterpret_cast<char *>(&record), sizeof(record));
+		std::cout << " ==========================================================" << std::endl;
+		while (!accountFile.eof())
+		{
+			if (std::strcmp(record.fNameLname,searchName)==0) {
+				std::cout << " ==========================================================" << std::endl;
+				std::cout << "          Name: " << record.fNameLname << std::endl;
+				std::cout << "       Address: " << record.address << std::endl;
+				std::cout << "                " << record.cityStateZip << std::endl;
+				std::cout << "  Phone Number: " << record.phoneNumber << std::endl;
+				std::cout << "       Balance: " << record.accountBalance << std::endl;
+				std::cout << "  Last Payment: " << record.lastPaymentDate << std::endl;
+				std::cout << " ==========================================================" << std::endl;
+				recordFound = true;
+			}
+			accountFile.read(reinterpret_cast<char *>(&record), sizeof(record));
+		}
+		if (!recordFound) {
+			std::cout << "             No records found" << std::endl;
+		}
+		std::cout << " ==========================================================" << std::endl;
+		std::cout << "Press return key to got back to the main menu.";
+		std::cin.get();
+		system("cls");
+	}
 
 
 
@@ -128,11 +174,11 @@ public:
 
 			std::cout << "Please enter the customer's first name only followed by the return key.\n";
 			std::cout << ": ";
-			std::cin >> fName;
+			std::cin.getline(fName, 256);
 
 			std::cout << "Please enter the customer's last name only followed by the return key.\n";
 			std::cout << ": ";
-			std::cin >> lName;
+			std::cin.getline(lName, 256);
 
 			//validate alpha only
 			index = 0;//element position
@@ -143,6 +189,7 @@ public:
 				if (!isalpha(fName[index]))
 				{
 					allAlpha = false;
+					break;
 				}
 				index++;
 			}
@@ -153,6 +200,7 @@ public:
 				if (!isalpha(lName[index]))
 				{
 					allAlpha = false;
+					break;
 				}
 				index++;
 			}
@@ -163,7 +211,7 @@ public:
 			//check allAlpha flag to write error
 			if (allAlpha != true)
 			{
-				std::cout << "\aAlpha Error: First and last name must be alpha only.\n\n";
+				std::cout << "\aAlpha Error: First and last name must be alphabetical characters only.\n\n";
 				flag++;
 			}
 
@@ -240,6 +288,9 @@ public:
 					for (int i = 0; i < address.length(); i++) {
 						if (ispunct(address[i])) {
 							flag = true;
+							system("cls");//clear the screen for clarity
+							std::cout << "\aPuncutation Error:  The address cannot contain punctuation" << std::endl << std::endl;
+							break;
 						}
 					}
 
@@ -298,6 +349,9 @@ public:
 					for (int i = 0; i < address2.length(); i++) {
 						if (ispunct(address2[i])) {
 							flag = true;
+							system("cls");//clear the screen for clarity
+							std::cout << "\aPuncutation Error:  The address cannot contain punctuation" << std::endl << std::endl;
+							break;
 						}
 					}
 
