@@ -4,17 +4,17 @@ Robert's TODO list for the accountOperations class
 1)
 add constructor to the class
 the constructur will create a record file if one does not exist
-<strong>done - Jem</strong>
+<strong>done - Jem</strong> See most recent push - Robert
 
 2)
 write createRecord() 
 the create record method will call all the setter methods and add the newly completed
 struct to the record file
-<strong>done - Jem</strong>
+<strong>done - Jem</strong> See most recent push - Robert
 
 3)
 write displayAllRecords() 
-this will display the entire record file
+this will display the entire record file <strong>done -Robert</strong>
 
 4)
 write getRecord()
