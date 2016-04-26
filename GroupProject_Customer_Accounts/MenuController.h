@@ -63,7 +63,7 @@ class MenuController {
 					operations.deleteRecord();
 					break;
 				case 5:
-
+					operations.changeRecord();
 					break;
 				case 6:
 					exitProgram = true;

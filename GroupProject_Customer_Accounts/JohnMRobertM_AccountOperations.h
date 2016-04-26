@@ -147,6 +147,8 @@ public:
 		system("cls");
 	}
 
+
+	//Ask the user to enter a name, and let them remove desired intances of that name from the records
 	void deleteRecord() {
 		//clear the screen for clarity
 		system("cls");
@@ -161,6 +163,7 @@ public:
 		bool recordChanged = false;
 		std::string accept;
 		int numDeleted = 0;
+		int numFound = 0;
 		accountFile.open("accounts.dat", std::ios::in | std::ios::binary);
 		std::fstream tempFile;
 		tempFile.open("tempAccounts.dat", std::ios::out);
@@ -169,6 +172,7 @@ public:
 		while (!accountFile.eof())
 		{
 			if (std::strcmp(record.fNameLname, searchName) == 0) {
+				numFound++;
 				do
 				{
 					std::cout << " ==========================================================" << std::endl;
@@ -224,7 +228,113 @@ public:
 			system("cls");
 		}
 		else {
-			std::cout << "No records removed" << std::endl;
+			if (numFound > 0) {
+				std::cout << "No records removed" << std::endl;
+			}
+			else {
+				std::cout << "No records found" << std::endl;
+			}
+			std::cout << "Press return key to got back to the main menu.";
+			std::cin.get();
+			system("cls");
+		}
+	}
+
+
+	//Ask the user for a name, and allow them to modify instances of that name in the records
+	void changeRecord() {
+		//clear the screen for clarity
+		system("cls");
+
+		//get input to find desired name
+		char searchName[SIZE];
+		std::cout << "Please enter the desired customer's first and last name, separated by a space, and followed by the return key.\n";
+		std::cout << ": ";
+		std::cin.getline(searchName, 256);
+
+		//search through file for matching records, write non matching record to temp file
+		bool recordChanged = false;
+		std::string accept;
+		int numChanged = 0;
+		int numFound = 0;
+		accountFile.open("accounts.dat", std::ios::in | std::ios::binary);
+		std::fstream tempFile;
+		tempFile.open("tempAccounts.dat", std::ios::out);
+		int count = 0;
+		accountFile.read(reinterpret_cast<char *>(&record), sizeof(record));
+		while (!accountFile.eof())
+		{
+			if (std::strcmp(record.fNameLname, searchName) == 0) {
+				numFound++;
+				do
+				{
+					std::cout << " ==========================================================" << std::endl;
+					std::cout << "          Name: " << record.fNameLname << std::endl;
+					std::cout << "       Address: " << record.address << std::endl;
+					std::cout << "                " << record.cityStateZip << std::endl;
+					std::cout << "  Phone Number: " << record.phoneNumber << std::endl;
+					std::cout << "       Balance: " << record.accountBalance << std::endl;
+					std::cout << "  Last Payment: " << record.lastPaymentDate << std::endl;
+					std::cout << " ==========================================================" << std::endl;
+					std::cout << std::endl << "Do you want to modify this record?" << std::endl;
+					std::cout << "Enter y for yes or n for no: ";
+					std::cin >> accept;
+				} while (accept.compare("y") != 0 && accept.compare("Y") != 0 && accept.compare("n") != 0 && accept.compare("N") != 0);
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				if (accept.compare("n") == 0 || accept.compare("N") == 0)
+				{
+					std::cout << count << std::endl;
+					tempFile.write(reinterpret_cast<char *>(&record), sizeof(record));
+				}
+				else {
+					setFnameLname();
+					setAddress();
+					setAddressLine2();
+					setPhoneNumber();
+					setAccountBalance();
+					setLastPaymentDate();
+					tempFile.write(reinterpret_cast<char *>(&record), sizeof(record));
+					numChanged++;
+					recordChanged = true;
+				}
+			}
+			else {
+				tempFile.write(reinterpret_cast<char *>(&record), sizeof(record));
+			}
+			accountFile.read(reinterpret_cast<char *>(&record), sizeof(record));
+			count++;
+		}
+		//close files
+		accountFile.close();
+		tempFile.close();
+		system("cls");
+		if (recordChanged == true) {
+			//delete old file
+			remove("accounts.dat");
+			//write temp file into new file, then delete temp file
+			tempFile.open("tempAccounts.dat", std::ios::in | std::ios::binary);
+			accountFile.open("accounts.dat", std::ios::out);
+			tempFile.read(reinterpret_cast<char *>(&record), sizeof(record));
+			while (!tempFile.eof())
+			{
+				accountFile.write(reinterpret_cast<char *>(&record), sizeof(record));
+				tempFile.read(reinterpret_cast<char *>(&record), sizeof(record));
+			}
+			accountFile.close();
+			tempFile.close();
+			remove("tempAccounts.dat");
+			std::cout << numChanged << " records altered" << std::endl;
+			std::cout << "Press return key to got back to the main menu.";
+			std::cin.get();
+			system("cls");
+		}
+		else {
+			if (numFound > 0) {
+				std::cout << "No records changed" << std::endl;
+			}
+			else {
+				std::cout << "No records found" << std::endl;
+			}
 			std::cout << "Press return key to got back to the main menu.";
 			std::cin.get();
 			system("cls");
