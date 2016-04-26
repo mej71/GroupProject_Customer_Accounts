@@ -31,3 +31,5 @@ Tasks 5&6 will be dependent on getRecord() as this will be called first
 <em><strong>Robert, I fixed the problem I think I had with the name, I think it was just that if you entered both names with a space on the first input, it left the last name in the buffer.  So, it would write fine, but it would be a bit confusing to the user.  This should also solve the address line 1 appearing twice sometimes, since that has to do with not emptying the buffer I think.  I completed 4, will work on the others tomorrow if I have time.
 Also, do we really need to use \a?  I find those alert tones quite jolting/annoying for a simple input error.  That's just a personal preference though.</strong></em>
 
+<em><strong>Jem: I will move the alert sounds from the files </strong></em>
+
