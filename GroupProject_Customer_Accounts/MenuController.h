@@ -30,9 +30,9 @@ class MenuController {
 		void showMenu() {
 			//create instance of the account operations class, to handle our menu choices
 			JohnMRobertM_AccountOperations operations;
-			system("cls");//clear the screen for clarity
+			//system("cls");//clear the screen for clarity
 			while (menuChoice == 0) {
-				while (std::cout << "Please choose one of the following:\n1. Enter a new customer record\n2. Search for a particular customer record\n3. Show all records\n4. Delete a record\n5. Modify a record\n6. Exit program\n" && !(std::cin >> menuChoice)) {
+				while (std::cout << "Please choose one of the following:\n\n1. Enter a new customer record\n2. Search for a particular customer record\n3. Show all records\n4. Delete a record\n5. Modify a record\n6. Exit program\n\n> " && !(std::cin >> menuChoice)) {
 					std::cin.clear(); //clear bad input flag
 					std::cin.ignore(1000, '\n'); //discard input
 					std::cout << "Please enter 1, 2, 3, 4, 5, or 6." << std::endl;

@@ -4,6 +4,7 @@
 #define JohnMRobertM_AccountOperations_H
 
 #include <string>
+#include <sstream>
 #include <iostream>
 #include <fstream>
 
@@ -65,6 +66,9 @@ public:
 		accountFile.open("accounts.dat", std::ios::out | std::ios::app);
 		accountFile.write(reinterpret_cast<char *>(&record), sizeof(record));
 		accountFile.close();
+        //clear the screen for clarity
+        system("cls");
+
 	}
 
 	/*
@@ -113,7 +117,8 @@ public:
 
 		//get input to find desired name
 		char searchName[SIZE];
-		std::cout << "Please enter the desired customer's first and last name, separated by a space, and followed by the return key.\n";
+		std::cout << "Please enter the desired customer's first and last name, separated by a space." << std::endl
+        << "Then press the return key.\n";
 		std::cout << ": ";
 		std::cin.getline(searchName, 256);
 
@@ -189,7 +194,7 @@ public:
 				} while (accept.compare("y") != 0 && accept.compare("Y") != 0 && accept.compare("n") != 0 && accept.compare("N") != 0);
 				if (accept.compare("n") == 0 || accept.compare("N") == 0)
 				{
-					std::cout << count << std::endl;
+                    std::cout << std::endl;
 					tempFile.write(reinterpret_cast<char *>(&record), sizeof(record));
 				}
 				else {
@@ -241,7 +246,7 @@ public:
 	}
 
 
-	//Ask the user for a name, and allow them to modify instances of that name in the records
+	//Ask the user for a name, and allows them to modify instances of that name in the records
 	void changeRecord() {
 		//clear the screen for clarity
 		system("cls");
@@ -251,6 +256,9 @@ public:
 		std::cout << "Please enter the desired customer's first and last name, separated by a space, and followed by the return key.\n";
 		std::cout << ": ";
 		std::cin.getline(searchName, 256);
+        //holds record info prior to changes
+        std::stringstream ss;
+        std::string oldRecord;
 
 		//search through file for matching records, write non matching record to temp file
 		bool recordChanged = false;
@@ -287,12 +295,18 @@ public:
 					tempFile.write(reinterpret_cast<char *>(&record), sizeof(record));
 				}
 				else {
-					setFnameLname();
-					setAddress();
-					setAddressLine2();
-					setPhoneNumber();
-					setAccountBalance();
-					setLastPaymentDate();
+                    //add record into string stream
+                    ss << "Name: " << record.fNameLname << std::endl << "Adress: " << record.address << std::endl
+                        << record.cityStateZip << std::endl << "Phone Number: " << record.phoneNumber << std::endl
+                        << "Balance: " << record.accountBalance << std::endl << "Last Payment: " << record.lastPaymentDate << std::endl;
+                    //append string stream in string
+                    oldRecord.append(ss.str());
+					setFnameLname(oldRecord);
+					setAddress(oldRecord);
+					setAddressLine2(oldRecord);
+					setPhoneNumber(oldRecord);
+					setAccountBalance(oldRecord);
+					setLastPaymentDate(oldRecord);
 					tempFile.write(reinterpret_cast<char *>(&record), sizeof(record));
 					numChanged++;
 					recordChanged = true;
@@ -347,7 +361,7 @@ public:
 	//Mutators associated with customerRecord struct
 	//all mutators provide i/O and validation
 	
-	void setFnameLname()
+	void setFnameLname(std::string oldRecord = "")
 	{
 		char fName[50];
 		char lName[50];
@@ -359,6 +373,10 @@ public:
 
 		//clear the screen for clarity
 		system("cls");
+
+        //print oldRecord if oldRecord is not empty
+        if (!oldRecord.empty())
+            showOldRecord(oldRecord);
 
 		do
 		{
@@ -405,7 +423,10 @@ public:
 			//check allAlpha flag to write error
 			if (allAlpha != true)
 			{
-				std::cout << "\aAlpha Error: First and last name must be alphabetical characters only.\n\n";
+                //print oldRecord if oldRecord is not empty
+                if (!oldRecord.empty())
+                    showOldRecord(oldRecord);
+				std::cout << "Alpha Error: First and last name must be alphabetical characters only.\n\n";
 				flag++;
 			}
 
@@ -414,7 +435,10 @@ public:
 			{
 				if(allAlpha == true)// clear screen for this error only if allApha has not done so
 					system("cls");
-				std::cout << "\aLength Error: First and last name should be at least two characters each.\n\n";
+                //print oldRecord if oldRecord is not empty
+                if (!oldRecord.empty())
+                    showOldRecord(oldRecord);
+				std::cout << "Length Error: First and last name should be at least two characters each.\n\n";
 				flag++;
 			}
 
@@ -450,13 +474,16 @@ public:
 	
 	}
 
-	void setAddress()
+	void setAddress(std::string oldRecord = "")
 	{
 		std::string address;
 		std::string accept;
 		bool flag;//flag for empty string / incorrect string true string is empty/incorrect false otherwise
 		//clear the screen for clarity
 		system("cls");
+        //print oldRecord if oldRecord is not empty
+        if (!oldRecord.empty())
+            showOldRecord(oldRecord);
 		 
 		do
 		{
@@ -474,7 +501,10 @@ public:
 				{
 					flag = true;
 					system("cls");//clear the screen for clarity
-					std::cout << "\aEmpty Error: The address cannot be empty." << std::endl << std::endl;
+                    //print oldRecord if oldRecord is not empty
+                    if (!oldRecord.empty())
+                        showOldRecord(oldRecord);
+					std::cout << "Empty Error: The address cannot be empty." << std::endl << std::endl;
 				}
 				else
 					flag = false;
@@ -483,7 +513,10 @@ public:
 						if (ispunct(address[i])) {
 							flag = true;
 							system("cls");//clear the screen for clarity
-							std::cout << "\aPuncutation Error:  The address cannot contain punctuation" << std::endl << std::endl;
+                            //print oldRecord if oldRecord is not empty
+                            if (!oldRecord.empty())
+                                showOldRecord(oldRecord);
+							std::cout << "Puncutation Error:  The address cannot contain punctuation" << std::endl << std::endl;
 							break;
 						}
 					}
@@ -506,19 +539,22 @@ public:
 		} while (flag);
 
 		//add to struct
-		strcpy_s(record.address, address.c_str());//record.address = address;
+		strcpy_s(record.address, address.c_str());
 
 		//Clear the input stream
 		std::cin.ignore();
 	
 	}
 
-	void setAddressLine2()
+	void setAddressLine2(std::string oldRecord = "")
 	{
 		std::string address2;
 		std::string accept;
 		bool flag;//flag for empty string / incorrect string true string is empty/incorrect false otherwise
 		system("cls");//clear the screen for clarity
+        //print oldRecord if oldRecord is not empty
+        if (!oldRecord.empty())
+            showOldRecord(oldRecord);
 
 		do
 		{
@@ -535,7 +571,10 @@ public:
 				{
 					flag = true;
 					system("cls");//clear the screen for clarity
-					std::cout << "\aEmpty Error: The  *** address cannot be empty." << std::endl << std::endl;
+                     //print oldRecord if oldRecord is not empty
+                    if (!oldRecord.empty())
+                        showOldRecord(oldRecord);
+					std::cout << "Empty Error: The  *** address cannot be empty." << std::endl << std::endl;
 				}
 				else
 					flag = false;
@@ -544,7 +583,10 @@ public:
 						if (ispunct(address2[i])) {
 							flag = true;
 							system("cls");//clear the screen for clarity
-							std::cout << "\aPuncutation Error:  The address cannot contain punctuation" << std::endl << std::endl;
+                            //print oldRecord if oldRecord is not empty
+                            if (!oldRecord.empty())
+                                showOldRecord(oldRecord);
+							std::cout << "Puncutation Error:  The address cannot contain punctuation" << std::endl << std::endl;
 							break;
 						}
 					}
@@ -573,13 +615,17 @@ public:
 		std::cin.ignore();
 	}
 
-	void setPhoneNumber()
+	void setPhoneNumber(std::string oldRecord = "")
 	{
 		char number[11];
 		bool invalid;//flag for number. If number is invalid; invalid == true otherwise false 
 		std::string accept;
 
 		system("cls");//clear the screen for clarity
+        //print oldRecord if oldRecord is not empty
+        if (!oldRecord.empty())
+            showOldRecord(oldRecord);
+
 		do 
 		{
 			//set bool to false
@@ -604,7 +650,10 @@ public:
 			if (invalid)
 			{
 				system("cls");//clear the screen for clarity
-				std::cout << "\aPhone Number Error: Enter 10 digits only no spaces." << std::endl << std::endl;
+                //print oldRecord if oldRecord is not empty
+                if (!oldRecord.empty())
+                    showOldRecord(oldRecord);
+				std::cout << "Phone Number Error: Enter 10 digits only no spaces." << std::endl << std::endl;
 			}
 			//verify
 			if (!invalid)
@@ -641,7 +690,7 @@ public:
 	
 	}
 
-	void setAccountBalance()
+	void setAccountBalance(std::string oldRecord = "")
 	{
 		char number[100];
 		bool invalid;//flag for number. If number is invalid; invalid == true otherwise false
@@ -649,6 +698,10 @@ public:
 		std::string accept;
 
 		system("cls");//clear the screen for clarity
+        //print oldRecord if oldRecord is not empty
+        if (!oldRecord.empty())
+            showOldRecord(oldRecord);
+
 		do
 		{
 			//set bool to false
@@ -691,7 +744,10 @@ public:
 			if (invalid || decimal != 1)//check if in valid true or too many decimals
 			{
 				system("cls");//clear the screen for clarity
-				std::cout << "\aBalance Error: Balance must be a positive value with only 2 decimal places." << std::endl << std::endl;
+                //print oldRecord if oldRecord is not empty
+                if (!oldRecord.empty())
+                    showOldRecord(oldRecord);
+				std::cout << "Balance Error: Balance must be a positive value with only 2 decimal places." << std::endl << std::endl;
 			}
 			//verify
 			if (!invalid && decimal == 1)
@@ -722,7 +778,7 @@ public:
 		std::cin.ignore();
 	}
 
-	void setLastPaymentDate()
+	void setLastPaymentDate(std::string oldRecord = "")
 	{
 		char date[11];
 		bool invalid;//flag for number. If number is invalid; invalid == true otherwise false 
@@ -730,6 +786,11 @@ public:
 		std::string temp;
 
 		system("cls");//clear the screen for clarity
+        //print oldRecord if oldRecord is not empty
+        if (!oldRecord.empty())
+            showOldRecord(oldRecord);
+        
+
 		do
 		{
 			//set bool to false
@@ -786,7 +847,10 @@ public:
 			if (invalid)//check if in valid true or too many decimals
 			{
 				system("cls");//clear the screen for clarity
-				std::cout << "\aDate Error: Date format must match: MM/DD/YYYY" << std::endl
+                //print oldRecord if oldRecord is not empty
+                if (!oldRecord.empty())
+                    showOldRecord(oldRecord);
+				std::cout << "Date Error: Date format must match: MM/DD/YYYY" << std::endl
 					<< "Year cannot be prior to 1999" << std::endl  << std::endl;
 			}
 			//verify
@@ -819,6 +883,14 @@ public:
 		std::cin.ignore();
 	
 	}
+
+    void showOldRecord(std::string oldRecord)
+    {
+        std::cout << "Previous Record Prior to changes" << std::endl;
+        std::cout << "==========================================================" << std::endl;
+        std::cout << oldRecord;
+        std::cout << "==========================================================" << std::endl << std::endl;
+    }
 
 	//Accessors associated with customerRecord struct
 	std::string getFnameLname()
