@@ -27,9 +27,11 @@ to edit a current record <strong>done - Jem</strong>
 
 Tasks 5&6 will be dependent on getRecord() as this will be called first 
 
-<em>Jem: That shouldn't be a problem to split them up I don't see the being inchoherent part though, as I am not sure how to recreate the issue I have noticed a minor bug of being asked for address line 1 twice some times though I am not sure what causes it to occur. prior to making the split I want to focus on tasks 4-6 as these are the last major things</em>
+Jem: That shouldn't be a problem to split them up I don't see the being inchoherent part though, as I am not sure how to recreate the issue I have noticed a minor bug of being asked for address line 1 twice some times though I am not sure what causes it to occur. prior to making the split I want to focus on tasks 4-6 as these are the last major things</em>
 <em><strong>Robert, I fixed the problem I think I had with the name, I think it was just that if you entered both names with a space on the first input, it left the last name in the buffer.  So, it would write fine, but it would be a bit confusing to the user.  This should also solve the address line 1 appearing twice sometimes, since that has to do with not emptying the buffer I think.  I completed 4, will work on the others tomorrow if I have time.
-Also, do we really need to use \a?  I find those alert tones quite jolting/annoying for a simple input error.  That's just a personal preference though.</strong></em>
+Also, do we really need to use \a?  I find those alert tones quite jolting/annoying for a simple input error.  That's just a personal preference though.
 
-<em><strong>Jem: I will move the alert sounds from the files </strong></em>
+Jem: I will move the alert sounds from the files 
+
+<em><strong>Anything else we need to do?  If not, we should meet before the presentation and quickly go over how we're going to present</strong></em>
 
